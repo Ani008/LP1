@@ -1,38 +1,44 @@
-graph = {
-    'A': {'B': 1, 'C': 3},
-    'B': {'D': 3, 'E': 1},
-    'C': {'F': 5},
-    'D': {'G': 2},
-    'E': {'G': 2},
-    'F': {'G': 1},
-    'G': {}
-}
+# Implement any one of the following Expert System
+# IV. Employee performance evaluation
 
-heuristic = {
-    'A': 6, 'B': 4, 'C': 4, 'D': 2, 'E': 2, 'F': 1, 'G': 0
-}
+# List of evaluation criteria
+criteria = ["productivity", "communication", "teamwork", "punctuality", "quality_of_work"]
 
-def a_star(start, goal):
-    open_list = {start}
-    g = {start: 0}
-    parents = {start: None}
+# Function to get rank input from the user (from -5 to 5)
+def get_rank_input(criterion):
+    rank = int(input(f"Enter rank for {criterion} (-5 to 5): "))
+    if -5 <= rank <= 5:
+        return rank
+    else:
+        print("Invalid input. Please enter an integer between -5 and 5.")
+    return get_rank_input(criterion)
 
-    while open_list:
-        current = min(open_list, key=lambda x: g[x] + heuristic[x])  
-        if current == goal:
-            path = []
-            while current:
-                path.append(current)
-                current = parents[current]
-            return path[::-1] 
+# Function to evaluate total score
+def evaluate_employee(ranks):
+    return sum(ranks.values())
 
-        open_list.remove(current)
-        for neighbor, cost in graph[current].items():
-            temp_g = g[current] + cost
-            if neighbor not in g or temp_g < g[neighbor]:
-                g[neighbor] = temp_g
-                parents[neighbor] = current
-                open_list.add(neighbor)
+# Main function
+def main():
+    ranks = {}
+    for criterion in criteria:
+        ranks[criterion] = get_rank_input(criterion)
 
-    return None
-print("Path:", a_star('A', 'G'))
+    score = evaluate_employee(ranks)
+    print(f"\nTotal Score: {score}")
+
+    if score > 15:
+        print("Performance: Exceptional")
+    elif score > 10:
+        print("Performance: Outstanding")
+    elif score > 0:
+        print("Performance: Good")
+    elif score == 0:
+        print("Performance: Neutral")
+    elif score >= -10:
+        print("Performance: Needs Improvement")
+    elif score >= -15:
+        print("Performance: Poor")
+    else:
+        print("Performance: Critical - Immediate Action Needed")
+
+main()
