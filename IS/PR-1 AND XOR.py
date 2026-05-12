@@ -1,37 +1,19 @@
-# Write a Java/C/C++/Python program to perform encryption and decryption using the method of the method of Transposition technique.
+# Write a Java/C/C++/Python program that contains a string (char pointer) with a value HelloWorld9. The program should AND or and XOR each character in this string with 127 and display the result.
 
-def encrypt(message, key):
-    encrypted = ""
-    # Read characters column by column
-    for col in range(key):
-        pointer = col
-        while pointer < len(message):
-            encrypted += message[pointer]
-            pointer += key
-    return encrypted
+s = "HelloWorld9"
 
-def decrypt(ciphertext, key):
-    num_rows = len(ciphertext) // key
-    if len(ciphertext) % key != 0:
-        num_rows += 1
+print("Original String:", s)
+print("\nChar|AND-127|XOR-127")
 
-    decrypted = [''] * len(ciphertext)
-    index = 0
+and_str = ''
+xor_str = ''
 
-    for col in range(key):
-        pointer = col
-        while pointer < len(ciphertext):
-            decrypted[pointer] = ciphertext[index]
-            pointer += key
-            index += 1
-    return ''.join(decrypted)
+for c in s:
+    a = ord(c) & 127
+    x = ord(c) ^ 127
+    and_str += chr(a)
+    xor_str += chr(x)
+    print(c,"  |",a,"  |",x)
 
-# Main program
-message = input("Enter message: ").replace(" ", "")
-key = int(input("Enter key (number): "))
-
-encrypted_msg = encrypt(message, key)
-print("Encrypted:", encrypted_msg)
-
-decrypted_msg = decrypt(encrypted_msg, key)
-print("Decrypted:", decrypted_msg)
+print("\nString after AND with 127:", and_str)
+print("String after XOR with 127:", xor_str)
