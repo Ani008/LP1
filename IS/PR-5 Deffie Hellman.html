@@ -1,0 +1,63 @@
+<!-- Implement the Diffie-Hellman Key Exchange mechanism using HTML and JavaScript. Consider the end user as one of the parties (Alice) and the JavaScript application as other party (bob) -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diffie-Hellman Key Exchange</title>
+</head>
+
+<body>
+    <h2>Diffie-Hellman Key Exchange</h2>
+    <p>Welcome, Alice! Below is the Diffie-Hellman Key Exchange simulation between you and Bob.</p>
+    <button onclick="startExchange()">Start Key Exchange</button>
+    <script>
+        // Function to calculate (a^b) % p
+        function power(a, b, p) {
+            let r = 1;
+            while (b > 0) {
+                if (b % 2) r = r * a % p;
+                a = a * a % p;
+                b = Math.floor(b / 2);
+            }
+            return r;
+        }
+
+
+        function startExchange() {
+            // Public parameters agreed upon by Alice and Bob
+            var P = 23;  // Prime number
+            var G = 9;   // Primitive root
+
+            var b = 15;  // Bob's private key 
+            var a = 30;  // Alice's private key
+
+            // Bob's public key
+            var y = power(G, b, P);
+
+            // Alice's public key
+            var x = power(G, a, P);
+
+            // Shared secret key calculations
+            var ka = power(y, a, P); // Alice's secret key
+            var kb = power(x, b, P); // Bob's secret key
+
+            // Displaying the results
+            document.write("<strong>Diffie-Hellman Key Exchange Details:</strong><br><br>");
+            document.write("Prime number P: " + P + "<br>");
+            document.write("Primitive root G: " + G + "<br><br>");
+            document.write("Alice's private key: " + a + "<br>");
+            document.write("Alice's public key: " + x + "<br><br>");
+            document.write("Bob's private key (simulated): " + b + "<br>");
+            document.write("Bob's public key: " + y + "<br><br>");
+            document.write("Alice's shared secret key: " + ka + "<br>");
+            document.write("Bob's shared secret key: " + kb + "<br><br>");
+            document.write("<strong>Shared Secret Key (should be the same): " + ka + "</strong><br>");
+            document.write("(Both Alice and Bob computed the same secret key)");
+        }
+    </script>
+</body>
+
+</html>
