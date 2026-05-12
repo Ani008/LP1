@@ -1,32 +1,32 @@
-# Develop an elementary chatbot for any suitable customer interaction application.
 
-import random
+N = int(input("Enter the number of queens: "))
+board = [[0] * N for _ in range(N)]
 
-responses = {
-    "greeting": ["Hello!", "Hi!"],
-    "farewell": ["Goodbye!", "Take care!"],
-    "thanks": ["You're welcome!", "Glad to help!"],
-    "default": ["Sorry, I didn't understand."]
-}
+def is_attack(row, col):
+    for i in range(N):
+        if board[row][i] == 1 or board[i][col] == 1:
+            return True
+    for i in range(N):
+        for j in range(N):
+            if abs(row - i) == abs(col - j) and board[i][j] == 1:
+                return True
+    return False
 
-def generate_response(user_input):
-    user_input = user_input.lower()
-    if "hello" in user_input or "hi" in user_input:
-        return random.choice(responses["greeting"])
-    elif "bye" in user_input:
-        return random.choice(responses["farewell"])
-    elif "thank" in user_input:
-        return random.choice(responses["thanks"])
-    else:
-        return random.choice(responses["default"])
+def solve_n_queens(n):
+    if n == 0:
+        return True
+    for i in range(N):
+        for j in range(N):
+            if board[i][j] == 0 and not is_attack(i, j):
+                board[i][j] = 1
+                if solve_n_queens(n - 1):
+                    return True
+                board[i][j] = 0
+    return False
 
-def chatbot():
-    print("Chatbot: Hi! How can I assist you?")
-    while True:
-        user_input = input("You: ")
-        response = generate_response(user_input)
-        print("Chatbot:", response)
-        if "bye" in response:
-            break
-
-chatbot()
+if solve_n_queens(N):
+    print("Solution for the N-Queens Problem:")
+    for row in board:
+        print(row)
+else:
+    print("No solution exists.")
