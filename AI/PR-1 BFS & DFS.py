@@ -1,19 +1,46 @@
-# Write a Java/C/C++/Python program that contains a string (char pointer) with a value HelloWorld9. The program should AND or and XOR each character in this string with 127 and display the result.
+# Implement depth first search algorithm and Breadth First Search 
+# algorithm, Use an undirected graph and develop a recursive algorithm 
+# for searching all the vertices of a graph or tree data structure.
 
-s = "HelloWorld9"
+# Graph (common for both DFS and BFS)
+graph = {
+    'A': set(['B', 'C']),
+    'B': set(['A', 'D', 'E']),
+    'C': set(['A', 'F', 'G']),
+    'D': set(['B']),
+    'E': set(['B']),
+    'F': set(['C']),
+    'G': set(['C'])
+}
 
-print("Original String:", s)
-print("\nChar|AND-127|XOR-127")
+# Depth First Search (DFS) - Recursive
+def dfs(graph, node, visited):
+    if node not in visited:
+        print(node, end=" ")
+        visited.add(node)
+        for neighbor in sorted(graph[node]):
+            dfs(graph, neighbor, visited)
 
-and_str = ''
-xor_str = ''
+# Breadth First Search (BFS)
+def bfs(graph, start):
+    visited = set()
+    queue = [start]
+    
+    while queue:
+        vertex = queue.pop(0)
+        if vertex not in visited:
+            print(vertex, end=" ")
+            visited.add(vertex)
+            for neighbor in sorted(graph[vertex]):
+                if neighbor not in visited:
+                    queue.append(neighbor)
+                    
+# Running DFS
+print("DFS Traversal starting from B:")
+dfs(graph, 'B', set())
 
-for c in s:
-    a = ord(c) & 127
-    x = ord(c) ^ 127
-    and_str += chr(a)
-    xor_str += chr(x)
-    print(c,"  |",a,"  |",x)
+print("\n")
 
-print("\nString after AND with 127:", and_str)
-print("String after XOR with 127:", xor_str)
+# Running BFS
+print("BFS Traversal starting from A:")
+bfs(graph, 'A')
