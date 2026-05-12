@@ -1,46 +1,38 @@
-# Implement depth first search algorithm and Breadth First Search 
-# algorithm, Use an undirected graph and develop a recursive algorithm 
-# for searching all the vertices of a graph or tree data structure.
-
-# Graph (common for both DFS and BFS)
 graph = {
-    'A': set(['B', 'C']),
-    'B': set(['A', 'D', 'E']),
-    'C': set(['A', 'F', 'G']),
-    'D': set(['B']),
-    'E': set(['B']),
-    'F': set(['C']),
-    'G': set(['C'])
+    'A': {'B': 1, 'C': 3},
+    'B': {'D': 3, 'E': 1},
+    'C': {'F': 5},
+    'D': {'G': 2},
+    'E': {'G': 2},
+    'F': {'G': 1},
+    'G': {}
 }
 
-# Depth First Search (DFS) - Recursive
-def dfs(graph, node, visited):
-    if node not in visited:
-        print(node, end=" ")
-        visited.add(node)
-        for neighbor in sorted(graph[node]):
-            dfs(graph, neighbor, visited)
+heuristic = {
+    'A': 6, 'B': 4, 'C': 4, 'D': 2, 'E': 2, 'F': 1, 'G': 0
+}
 
-# Breadth First Search (BFS)
-def bfs(graph, start):
-    visited = set()
-    queue = [start]
-    
-    while queue:
-        vertex = queue.pop(0)
-        if vertex not in visited:
-            print(vertex, end=" ")
-            visited.add(vertex)
-            for neighbor in sorted(graph[vertex]):
-                if neighbor not in visited:
-                    queue.append(neighbor)
-                    
-# Running DFS
-print("DFS Traversal starting from B:")
-dfs(graph, 'B', set())
+def a_star(start, goal):
+    open_list = {start}
+    g = {start: 0}
+    parents = {start: None}
 
-print("\n")
+    while open_list:
+        current = min(open_list, key=lambda x: g[x] + heuristic[x])  
+        if current == goal:
+            path = []
+            while current:
+                path.append(current)
+                current = parents[current]
+            return path[::-1] 
 
-# Running BFS
-print("BFS Traversal starting from A:")
-bfs(graph, 'A')
+        open_list.remove(current)
+        for neighbor, cost in graph[current].items():
+            temp_g = g[current] + cost
+            if neighbor not in g or temp_g < g[neighbor]:
+                g[neighbor] = temp_g
+                parents[neighbor] = current
+                open_list.add(neighbor)
+
+    return None
+print("Path:", a_star('A', 'G'))
